@@ -13,8 +13,8 @@ class MetadataRecord(BaseModel):
     status_code: Optional[int] = None
     fetched_at: datetime = Field(default_factory=datetime.utcnow)
     
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "url": "https://example.com",
                 "headers": {"Content-Type": "text/html"},
@@ -24,3 +24,4 @@ class MetadataRecord(BaseModel):
                 "fetched_at": "2024-05-20T12:00:00Z"
             }
         }
+    }

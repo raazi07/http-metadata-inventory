@@ -10,20 +10,41 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from contextlib import asynccontextmanager
+import asyncio
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Handle startup and shutdown logic.
+    Retries DB connection/index creation on startup to ensure resilience.
+    """
+    # Startup logic
+    max_retries = 5
+    retry_delay = 2
+    
+    for i in range(max_retries):
+        try:
+            # Create a unique index on the 'url' field
+            await db.metadata.create_index("url", unique=True)
+            logger.info("Created unique index on 'url' field.")
+            break
+        except Exception as e:
+            logger.warning(f"Attempt {i+1}/{max_retries}: Could not create index (DB might be starting up): {e}")
+            if i < max_retries - 1:
+                await asyncio.sleep(retry_delay)
+            else:
+                logger.error("Failed to initialize database after multiple retries.")
+    
+    yield
+    # Shutdown logic (if any)
+
 app = FastAPI(
     title="HTTP Metadata Inventory",
     description="Service to collect and retrieve metadata for URLs.",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
-
-@app.on_event("startup")
-async def create_indexes():
-    """
-    Create indexes on startup to ensure efficient lookups.
-    """
-    # Create a unique index on the 'url' field
-    await db.metadata.create_index("url", unique=True)
-    logger.info("Created unique index on 'url' field.")
 
 @app.post("/metadata", status_code=status.HTTP_201_CREATED)
 async def create_metadata(input_data: URLInput):

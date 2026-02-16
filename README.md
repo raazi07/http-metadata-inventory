@@ -55,19 +55,33 @@ Once running, you can access the interactive API docs at:
      - `200 OK`: Returns metadata (headers, cookies, page_source).
      - `202 Accepted`: Metadata not found, collection triggered in background.
 
+
 ## Testing
 
-To run the tests, you can use `pytest`.
+You can run the test suite locally or using Docker (recommended).
 
-1. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Option 1: Running Tests via Docker (Recommended)
 
-2. **Run tests**:
-   ```bash
-   pytest
-   ```
+This ensures the tests run in the same environment as the application.
+
+1.  **Build and run the tests**:
+    ```bash
+    docker-compose run --rm app pytest
+    ```
+
+### Option 2: Running Tests Locally
+
+If you have Python installed locally:
+
+1.  **Install dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+2.  **Run tests**:
+    ```bash
+    pytest
+    ```
 
 ## Architecture
 
