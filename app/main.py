@@ -43,7 +43,8 @@ app = FastAPI(
     title="HTTP Metadata Inventory",
     description="Service to collect and retrieve metadata for URLs.",
     version="1.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    redoc_url=None
 )
 
 @app.post("/metadata", status_code=status.HTTP_201_CREATED)

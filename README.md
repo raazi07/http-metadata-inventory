@@ -33,7 +33,6 @@ A FastAPI-based service to collect and retrieve metadata (headers, cookies, page
 
 Once running, you can access the interactive API docs at:
 - Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
 
 ### Endpoints
 

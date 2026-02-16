@@ -102,7 +102,6 @@ async def test_get_metadata_missing(mock_db):
     mock_db.metadata.find_one.return_value = None
     
     # We also need to mock fetch_and_store_metadata so it doesn't actually run or cause issues
-    # But wait, fetch_and_store_metadata is imported in main.py
     with patch("app.main.fetch_and_store_metadata") as mock_bg_task:
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
             response = await ac.get("/metadata", params={"url": "https://example.com"})
